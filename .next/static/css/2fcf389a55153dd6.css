@@ -1,0 +1,1 @@
+:root{--bg-primary:#fafaf8;--bg-surface:#fff;--text-primary:#1a1a1a;--text-secondary:#6b6b6b;--accent-primary:#2563eb;--accent-warm:#dc7f4a;--border:#e5e5e0;--shadow:rgba(0,0,0,.06)}*{box-sizing:border-box;margin:0;padding:0}body{background:var(--bg-primary);color:var(--text-primary);font-family:IBM Plex Sans,system-ui,sans-serif}

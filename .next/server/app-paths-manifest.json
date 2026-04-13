@@ -1,0 +1,15 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/auth/logout/route": "app/api/auth/logout/route.js",
+  "/api/auth/register/route": "app/api/auth/register/route.js",
+  "/(auth)/register/page": "app/(auth)/register/page.js",
+  "/api/sessions/[id]/analyze/route": "app/api/sessions/[id]/analyze/route.js",
+  "/(auth)/login/page": "app/(auth)/login/page.js",
+  "/api/auth/login/route": "app/api/auth/login/route.js",
+  "/api/sessions/[id]/messages/route": "app/api/sessions/[id]/messages/route.js",
+  "/api/sessions/[id]/route": "app/api/sessions/[id]/route.js",
+  "/page": "app/page.js",
+  "/api/sessions/route": "app/api/sessions/route.js",
+  "/(app)/workspace/page": "app/(app)/workspace/page.js",
+  "/(app)/session/[id]/page": "app/(app)/session/[id]/page.js"
+}

@@ -1,0 +1,18 @@
+:root {
+  --bg-primary: #FAFAF8;
+  --bg-surface: #FFFFFF;
+  --text-primary: #1A1A1A;
+  --text-secondary: #6B6B6B;
+  --accent-primary: #2563EB;
+  --accent-warm: #DC7F4A;
+  --border: #E5E5E0;
+  --shadow: rgba(0,0,0,0.06);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+}
