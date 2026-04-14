@@ -5,7 +5,7 @@ import UploadSection from '@/components/UploadSection'
 
 export default async function WorkspacePage() {
   const session = await getSession()
-  const userId = (session!.payload as { userId: string }).userId
+  const userId = (session as unknown as { userId: string }).userId
 
   const sessions = await prisma.session.findMany({
     where: { userId },
