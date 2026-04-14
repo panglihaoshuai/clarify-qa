@@ -8,7 +8,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   return (
     <div style={{ minHeight: '100vh', background: '#FAFAF8' }}>
-      <Header email={(session.payload as { email: string }).email} />
+      <Header email={(session as unknown as { email: string }).email} />
       {children}
     </div>
   )

@@ -6,7 +6,7 @@ import { getSkillPrompt } from '@/lib/skills'
 export async function POST(req: Request, { params }: { params: { id: string } }) {
   const session = await getSession()
   if (!session) return NextResponse.json({ error: '未登录' }, { status: 401 })
-  const userId = (session.payload as { userId: string }).userId
+  const userId = (session as unknown as { userId: string }).userId
 
   const s = await prisma.session.findFirst({ where: { id: params.id, userId } })
   if (!s) return NextResponse.json({ error: '未找到' }, { status: 404 })

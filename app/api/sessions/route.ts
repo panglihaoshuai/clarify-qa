@@ -8,7 +8,7 @@ const CreateSchema = z.object({ methodology: z.string().default('brainstorming')
 export async function GET() {
   const session = await getSession()
   if (!session) return NextResponse.json({ error: '未登录' }, { status: 401 })
-  const userId = (session.payload as { userId: string }).userId
+  const userId = (session as unknown as { userId: string }).userId
 
   const sessions = await prisma.session.findMany({
     where: { userId },
@@ -22,7 +22,7 @@ export async function GET() {
 export async function POST(req: Request) {
   const session = await getSession()
   if (!session) return NextResponse.json({ error: '未登录' }, { status: 401 })
-  const userId = (session.payload as { userId: string }).userId
+  const userId = (session as unknown as { userId: string }).userId
 
   const body = await req.json()
   const { methodology } = CreateSchema.parse(body)

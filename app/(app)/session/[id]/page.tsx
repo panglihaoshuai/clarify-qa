@@ -6,7 +6,7 @@ import AnalysisChat from '@/components/AnalysisChat'
 export default async function SessionPage({ params }: { params: { id: string } }) {
   const session = await getSession()
   if (!session) redirect('/login')
-  const userId = (session.payload as { userId: string }).userId
+  const userId = (session as unknown as { userId: string }).userId
 
   const s = await prisma.session.findFirst({ where: { id: params.id, userId } })
   if (!s) redirect('/workspace')
