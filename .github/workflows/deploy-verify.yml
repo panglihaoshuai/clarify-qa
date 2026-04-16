@@ -199,3 +199,5 @@ for v in data:
           echo "| Smoke Tests | ${{ job.status }} |"
           echo ""
           echo "**Artifacts (on failure):** deployment-logs, playwright-report"
+
+# touch to re-register workflow dispatch trigger
