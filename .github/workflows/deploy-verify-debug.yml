@@ -3,22 +3,6 @@ name: Deploy Verify Debug
 
 on:
   workflow_dispatch:
-    inputs:
-      service-name:
-        description: 'Railway service name'
-        required: false
-        default: 'clarify-qa'
-        type: string
-      deployment-id:
-        description: 'Deployment ID to verify (leave empty for latest)'
-        required: false
-        default: ''
-        type: string
-      playwright-only:
-        description: 'Skip deploy verification, only run smoke tests'
-        required: false
-        default: 'false'
-        type: string
   push:
 
 jobs:
