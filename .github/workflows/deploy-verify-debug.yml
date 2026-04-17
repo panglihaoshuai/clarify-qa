@@ -42,3 +42,7 @@ jobs:
         run: railway login --token ${{ secrets.RAILWAY_TOKEN }}
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+      - name: Link project
+        run: railway link --project ${{ secrets.RAILWAY_PROJECT_ID }} --service ${{ github.event.inputs.service-name || 'clarify-qa' }}
+        continue-on-error: true
