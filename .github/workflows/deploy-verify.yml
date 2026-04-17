@@ -200,4 +200,4 @@ for v in data:
           echo ""
           echo "**Artifacts (on failure):** deployment-logs, playwright-report"
 
-# touch to re-register workflow dispatch trigger
+# touch to verify git-push workflow registration
