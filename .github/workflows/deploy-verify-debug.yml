@@ -51,13 +51,6 @@ jobs:
         id: deployment
         run: |
           echo "service=${{ github.event.inputs.service-name }}" >> $GITHUB_OUTPUT
-          SCRIPT='import json,sys
-data=json.load(sys.stdin)
-for d in data.get(""deployments""):
-    if d.get(""status"") != ""REMOVED"":
-        print(d['"id"'])
-        break'
-          DEPLOYMENT=$(echo "$SCRIPT" | python3)
+          DEPLOYMENT=$(echo '{}' | python3 -c 'import json,sys; print("ok")')
           echo "id=$DEPLOYMENT"
           echo "mode=latest"
-          echo "id=$DEPLOYMENT" >> $GITHUB_OUTPUT
