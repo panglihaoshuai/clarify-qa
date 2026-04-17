@@ -1,0 +1,19 @@
+name: Canary Dispatch
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  canary:
+    name: Canary Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo start
+        run: echo "canary start"
+
+      - name: Echo timestamp
+        run: echo "timestamp=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
+      - name: Echo done
+        run: echo "canary done"
