@@ -58,7 +58,7 @@ for d in data.get('deployments',[]):
     if d.get('status') != 'REMOVED':
         print(d['id'])
         break
-" 2>/dev/null)
+")
           echo "id=$DEPLOYMENT"
           echo "mode=latest"
           echo "id=$DEPLOYMENT" >> $GITHUB_OUTPUT
