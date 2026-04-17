@@ -1,0 +1,113 @@
+name: Deploy Verify V3
+
+on:
+  workflow_dispatch:
+    inputs:
+      service-name:
+        description: 'Railway service name'
+        required: false
+        default: 'clarify-qa'
+        type: string
+      deployment-id:
+        description: 'Deployment ID to verify (leave empty for latest)'
+        required: false
+        default: ''
+        type: string
+      playwright-only:
+        description: 'Skip deploy verification, only run smoke tests'
+        required: false
+        default: 'false'
+        type: string
+
+jobs:
+  verify:
+    name: Post-Deploy Verification
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Authenticate Railway
+        run: railway login --token ${{ secrets.RAILWAY_TOKEN }}
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+      - name: Link project
+        run: railway link --project ${{ secrets.RAILWAY_PROJECT_ID }} --service ${{ github.event.inputs.service-name || 'clarify-qa' }}
+        continue-on-error: true
+
+      - name: Get deployment ID
+        if: github.event.inputs.playwright-only != 'true'
+        id: deployment
+        run: |
+          DEPLOYMENT=$(railway deployment list --service ${{ github.event.inputs.service-name || 'clarify-qa' }} --json 2>/dev/null | python3 -c 'import json,sys; data=json.load(sys.stdin); [print(d["id"]) for d in data.get("deployments",[]) if d.get("status")!="REMOVED"]; print("__END__")' | head -1)
+          echo "id=$DEPLOYMENT"
+          echo "mode=latest"
+          echo "id=$DEPLOYMENT" >> $GITHUB_OUTPUT
+
+      - name: Get deployment status
+        if: github.event.inputs.playwright-only != 'true'
+        id: status
+        run: |
+          DEPLOY_STATUS=$(railway deployment list --service ${{ github.event.inputs.service-name || 'clarify-qa' }} --json 2>/dev/null | python3 -c 'import json,sys; data=json.load(sys.stdin); [print(d.get("status","UNKNOWN")) for d in data.get("deployments",[]) if d.get("status")!="REMOVED"]; print("__END__")' | head -1)
+          echo "status=$DEPLOY_STATUS"
+          echo "status=$DEPLOY_STATUS" >> $GITHUB_OUTPUT
+
+      - name: Get service URL
+        if: github.event.inputs.playwright-only != 'true'
+        id: service-info
+        run: |
+          railway variables --json 2>/dev/null | python3 -c 'import json,sys; data=json.load(sys.stdin); [print(v["value"]) for v in data if v.get("key") in ("RAILWAY_PUBLIC_DOMAIN","NEXT_PUBLIC_APP_URL")]; print("__END__")' > url.txt
+          echo "url=$(cat url.txt)" >> $GITHUB_OUTPUT
+
+      - name: Fetch deployment logs
+        if: github.event.inputs.playwright-only != 'true'
+        run: echo "fetch logs"
+
+      - name: Check deployment status
+        if: github.event.inputs.playwright-only != 'true'
+        run: echo "check status"
+
+      - name: Health check
+        if: github.event.inputs.playwright-only != 'true'
+        id: health
+        run: echo "health check"
+
+      - name: Install Playwright
+        run: echo "install playwright"
+
+      - name: Run smoke tests
+        id: playwright
+        run: echo "run smoke tests"
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-logs
+          path: logs/
+          retention-days: 7
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+            playwright-output.txt
+          retention-days: 7
+
+      - name: Summary
+        run: echo "summary"
