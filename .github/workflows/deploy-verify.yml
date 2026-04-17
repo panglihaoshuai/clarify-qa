@@ -50,7 +50,7 @@ jobs:
         if: github.event.inputs.playwright-only != 'true'
         id: deployment
         run: |
-          DEPLOYMENT=$(echo '["id-123"]' | python3 -c 'import json,sys; print("id-123")')
+          DEPLOYMENT=$(railway deployment list --service ${{ github.event.inputs.service-name || 'clarify-qa' }} --json 2>/dev/null | python3 -c 'import json,sys; data=json.load(sys.stdin); [print(d["id"]) for d in data.get("deployments",[]) if d.get("status")!="REMOVED"]; print("__END__")' | head -1)
           echo "id=$DEPLOYMENT"
           echo "mode=latest"
           echo "id=$DEPLOYMENT" >> $GITHUB_OUTPUT
