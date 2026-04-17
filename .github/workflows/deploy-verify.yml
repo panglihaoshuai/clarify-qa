@@ -35,19 +35,34 @@ jobs:
           cache: 'npm'
 
       - name: Install Railway CLI
-        run: echo "install railway"
+        run: npm install -g @railway/cli
 
       - name: Authenticate Railway
-        run: echo "auth railway"
+        run: railway login --token ${{ secrets.RAILWAY_TOKEN }}
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
       - name: Link project
-        run: echo "link railway"
+        run: railway link --project ${{ secrets.RAILWAY_PROJECT_ID }} --service ${{ github.event.inputs.service-name || 'clarify-qa' }}
         continue-on-error: true
 
       - name: Get deployment ID
         if: github.event.inputs.playwright-only != 'true'
         id: deployment
-        run: echo "get deployment id"
+        run: |
+          echo "Getting deployment ID..."
+          DEPLOYMENT=$(railway deployment list --service ${{ github.event.inputs.service-name || 'clarify-qa' }} --json | python3 << 'PYEOF'
+import json,sys
+data=json.load(sys.stdin)
+for d in data.get('deployments',[]):
+    if d.get('status') != 'REMOVED':
+        print(d['id'])
+        break
+PYEOF
+)
+          echo "id=$DEPLOYMENT"
+          echo "mode=latest"
+          echo "id=$DEPLOYMENT" >> $GITHUB_OUTPUT
 
       - name: Get deployment status
         if: github.event.inputs.playwright-only != 'true'
