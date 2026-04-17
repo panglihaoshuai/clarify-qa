@@ -1,4 +1,4 @@
-# TEST: brand new minimal workflow
+# deploy-verify-debug.yml — incremental step experiment
 name: Deploy Verify Debug
 
 on:
