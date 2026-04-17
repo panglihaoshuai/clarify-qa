@@ -49,4 +49,5 @@ jobs:
 
       - name: Get deployment ID
         id: deployment
-        run: echo "placeholder"
+        run: |
+          echo "mode=latest" && echo "id=test" >> $GITHUB_OUTPUT
