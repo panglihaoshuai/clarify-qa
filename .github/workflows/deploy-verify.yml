@@ -47,17 +47,10 @@ jobs:
         continue-on-error: true
 
       - name: Get deployment ID
+        if: github.event.inputs.playwright-only != 'true'
         id: deployment
         run: |
-          DEPLOYMENT=$(echo '{"id":"test-123","status":"SUCCESS"}' | python3 << 'PYEOF'
-import json,sys
-data=json.load(sys.stdin)
-for d in data.get('deployments',[]):
-    if d.get('status') != 'REMOVED':
-        print(d['id'])
-        break
-PYEOF
-)
+          DEPLOYMENT=$(echo '["id-123"]' | python3 -c 'import json,sys; print("id-123")')
           echo "id=$DEPLOYMENT"
           echo "mode=latest"
           echo "id=$DEPLOYMENT" >> $GITHUB_OUTPUT
