@@ -49,7 +49,6 @@ jobs:
 
       - name: Get deployment ID
         id: deployment
-        if: github.event.inputs.playwright-only != 'true'
         run: |
           if [ -n "${{ github.event.inputs.deployment-id }}" ]; then
             echo "id=${{ github.event.inputs.deployment-id }}" >> $GITHUB_OUTPUT
