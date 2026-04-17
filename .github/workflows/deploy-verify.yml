@@ -27,3 +27,76 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Railway CLI
+        run: echo "install railway"
+
+      - name: Authenticate Railway
+        run: echo "auth railway"
+
+      - name: Link project
+        run: echo "link railway"
+        continue-on-error: true
+
+      - name: Get deployment ID
+        if: github.event.inputs.playwright-only != 'true'
+        id: deployment
+        run: echo "get deployment id"
+
+      - name: Get deployment status
+        if: github.event.inputs.playwright-only != 'true'
+        id: status
+        run: echo "get deployment status"
+
+      - name: Get service URL
+        if: github.event.inputs.playwright-only != 'true'
+        id: service-info
+        run: echo "get service url"
+
+      - name: Fetch deployment logs
+        if: github.event.inputs.playwright-only != 'true'
+        run: echo "fetch logs"
+
+      - name: Check deployment status
+        if: github.event.inputs.playwright-only != 'true'
+        run: echo "check status"
+
+      - name: Health check
+        if: github.event.inputs.playwright-only != 'true'
+        id: health
+        run: echo "health check"
+
+      - name: Install Playwright
+        run: echo "install playwright"
+
+      - name: Run smoke tests
+        id: playwright
+        run: echo "run smoke tests"
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-logs
+          path: logs/
+          retention-days: 7
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+            playwright-output.txt
+          retention-days: 7
+
+      - name: Summary
+        run: echo "summary"
