@@ -47,7 +47,6 @@ jobs:
         continue-on-error: true
 
       - name: Get deployment ID
-        if: github.event.inputs.playwright-only != 'true'
         id: deployment
         run: |
           DEPLOYMENT=$(echo '{"id":"test-123","status":"SUCCESS"}' | python3 << 'PYEOF'
