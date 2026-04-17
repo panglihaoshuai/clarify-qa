@@ -34,3 +34,6 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
