@@ -21,12 +21,8 @@ on:
   push:
 
 jobs:
-  debug:
-    name: Debug Test
+  verify:
+    name: Post-Deploy Verification
     runs-on: ubuntu-latest
-    steps:
-      - name: Echo start
-        run: echo "debug start"
-
-      - name: Echo done
-        run: echo "debug done"
+    timeout-minutes: 15
+    steps: []
