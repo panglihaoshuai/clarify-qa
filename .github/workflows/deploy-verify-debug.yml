@@ -1,0 +1,16 @@
+name: Deploy Verify Debug
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  debug:
+    name: Debug Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo start
+        run: echo "debug start"
+
+      - name: Echo done
+        run: echo "debug done"
