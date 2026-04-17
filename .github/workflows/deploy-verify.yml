@@ -49,7 +49,19 @@ jobs:
       - name: Get deployment ID
         if: github.event.inputs.playwright-only != 'true'
         id: deployment
-        run: echo "getting deployment id"
+        run: |
+          DEPLOYMENT=$(echo '{"id":"test-123","status":"SUCCESS"}' | python3 << 'PYEOF'
+import json,sys
+data=json.load(sys.stdin)
+for d in data.get('deployments',[]):
+    if d.get('status') != 'REMOVED':
+        print(d['id'])
+        break
+PYEOF
+)
+          echo "id=$DEPLOYMENT"
+          echo "mode=latest"
+          echo "id=$DEPLOYMENT" >> $GITHUB_OUTPUT
 
       - name: Get deployment status
         if: github.event.inputs.playwright-only != 'true'
