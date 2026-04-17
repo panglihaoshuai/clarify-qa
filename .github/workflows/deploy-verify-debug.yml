@@ -46,3 +46,23 @@ jobs:
       - name: Link project
         run: railway link --project ${{ secrets.RAILWAY_PROJECT_ID }} --service ${{ github.event.inputs.service-name || 'clarify-qa' }}
         continue-on-error: true
+
+      - name: Get deployment ID
+        id: deployment
+        run: |
+          if [ -n "${{ github.event.inputs.deployment-id }}" ]; then
+            echo "id=${{ github.event.inputs.deployment-id }}" >> $GITHUB_OUTPUT
+            echo "mode=input"
+          else
+            DEPLOYMENT=$(railway deployment list --service ${{ github.event.inputs.service-name || 'clarify-qa' }} --json | python3 -c "
+import json,sys
+data=json.load(sys.stdin)
+for d in data.get('deployments',[]):
+    if d.get('status') != 'REMOVED':
+        print(d['id'])
+        break
+" 2>/dev/null)
+            echo "id=$DEPLOYMENT"
+            echo "mode=latest"
+            echo "id=$DEPLOYMENT" >> $GITHUB_OUTPUT
+          fi
