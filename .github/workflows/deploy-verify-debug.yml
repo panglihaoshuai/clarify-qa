@@ -51,10 +51,7 @@ jobs:
         id: deployment
         run: |
           echo "service=${{ github.event.inputs.service-name }}" >> $GITHUB_OUTPUT
-          DEPLOYMENT=$(python3 -c "
-import json,sys
-print('test-id')
-")
+          DEPLOYMENT=$(echo "shell-test-id")
           echo "id=$DEPLOYMENT"
           echo "mode=latest"
           echo "id=$DEPLOYMENT" >> $GITHUB_OUTPUT
