@@ -50,4 +50,5 @@ jobs:
       - name: Get deployment ID
         id: deployment
         run: |
-          echo "mode=latest" && echo "id=test" >> $GITHUB_OUTPUT
+          echo "service=${{ github.event.inputs.service-name }}" >> $GITHUB_OUTPUT
+          echo "mode=latest"
