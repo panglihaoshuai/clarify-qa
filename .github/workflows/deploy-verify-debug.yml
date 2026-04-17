@@ -25,4 +25,6 @@ jobs:
     name: Post-Deploy Verification
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    steps: []
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
