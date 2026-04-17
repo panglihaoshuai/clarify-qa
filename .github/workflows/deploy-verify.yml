@@ -58,12 +58,17 @@ jobs:
       - name: Get deployment status
         if: github.event.inputs.playwright-only != 'true'
         id: status
-        run: echo "get deployment status"
+        run: |
+          DEPLOY_STATUS=$(railway deployment list --service ${{ github.event.inputs.service-name || 'clarify-qa' }} --json 2>/dev/null | python3 -c 'import json,sys; data=json.load(sys.stdin); [print(d.get("status","UNKNOWN")) for d in data.get("deployments",[]) if d.get("status")!="REMOVED"]; print("__END__")' | head -1)
+          echo "status=$DEPLOY_STATUS"
+          echo "status=$DEPLOY_STATUS" >> $GITHUB_OUTPUT
 
       - name: Get service URL
         if: github.event.inputs.playwright-only != 'true'
         id: service-info
-        run: echo "get service url"
+        run: |
+          railway variables --json 2>/dev/null | python3 -c 'import json,sys; data=json.load(sys.stdin); [print(v["value"]) for v in data if v.get("key") in ("RAILWAY_PUBLIC_DOMAIN","NEXT_PUBLIC_APP_URL")]; print("__END__")' > url.txt
+          echo "url=$(cat url.txt)" >> $GITHUB_OUTPUT
 
       - name: Fetch deployment logs
         if: github.event.inputs.playwright-only != 'true'
